@@ -1,0 +1,117 @@
+$c-white: #FFF;
+$c-grey-light: #EBEBEB;
+$c-grey-dark: #C2C2C2;
+$c-orange: #FF8500;
+
+.report {
+
+  &__control-panel {
+    display: flex;
+    justify-content: space-evenly;
+
+    label {
+      margin-right: 10px;
+    }
+
+    input, select {
+      border: 1px solid $c-grey-dark;
+      border-radius: 3px;
+      box-sizing: border-box;
+      box-shadow: 1px 1px 4px $c-grey-light;
+      height: 29px;
+      padding: 7px;
+      outline: none;
+      width: 100px;
+    }
+
+    button {
+      background: $c-orange;
+      border: none;
+      border-radius: 3px;
+      box-shadow: 1px 1px 4px $c-grey-light;
+      color: $c-white;
+      padding: 8px 15px 8px 15px;
+      height: 29px;
+      width: 120px;
+
+      &:disabled {
+        background: $c-grey-dark;
+        color: $c-grey-light;
+      }
+    }
+  }
+
+  &__preview-container {
+    padding: 30px;
+
+    .page {
+      background-color: $c-white;
+      box-shadow: 8px 8px 5px $c-grey-dark;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+      outline: 1px solid $c-grey-light;
+      padding: 5% 1%;
+
+      &.a4 {
+        height: 297mm;
+        width: 210mm;
+        &.landscape {
+          height: 210mm;
+          width: 297mm;
+        }
+      }
+
+      &.letter {
+        height: 279.4mm;
+        width: 215.9mm;
+        &.landscape {
+          height: 215.9mm;
+          width: 279.4mm;
+        }
+      }
+
+      &.legal {
+        height: calc(356mm * 0.9);
+        width: calc(216mm * 0.9);
+        &.landscape {
+          height: calc(216mm * 0.9);
+          width: calc(356mm * 0.9);
+        }
+      }
+
+      &__table {
+        display: table;
+        text-align: left;
+        width: 100%;
+
+        .header {
+          background-color: $c-grey-light;
+          display: table-header-group;
+
+          .col {
+            font-weight: bold;
+            text-transform: uppercase;
+          }   
+        }
+
+        .row {
+          display: table-row;
+
+          &:nth-child(odd) {
+            background-color: $c-grey-light;
+          }
+        }
+
+        .col {
+          display: table-cell;
+          font-size: 12px;
+          padding: 2px 5px;
+          width: auto;
+        }
+
+      }
+
+    }
+  }
+}

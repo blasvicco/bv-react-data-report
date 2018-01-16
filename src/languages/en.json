@@ -1,0 +1,11 @@
+{
+  "report": {
+    "controlPanel": {
+      "itemsPerPage": "Items per page",
+      "pageFormat": "Page format",
+      "pageSize": "Page size",
+      "processing": "Processing...",
+      "generatePdf": "Download PDF"
+    }
+  }
+}
