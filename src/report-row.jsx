@@ -1,5 +1,7 @@
 import React from 'react';
 
+const dateFormat = 'MM/DD/YYYY';
+
 module.exports = class ReportRow extends React.Component {
   constructor(props) {
     super(props);

@@ -1,6 +1,6 @@
 {
   "name": "react-data-report",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
@@ -22,12 +22,14 @@
   "dependencies": {
     "css-loader": "^0.28.8",
     "html2canvas": "^1.0.0-alpha.9",
+    "i18n-react": "^0.1.0",
     "jspdf": "^1.3.5",
+    "moment": "^2.20.1",
     "node-sass": "^4.7.2",
+    "react": "^15.6.2",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
-    "i18n-react": "^0.1.0",
-    "react": "^15.6.2"
+    "webpack": "^3.10.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -41,7 +43,6 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
-    "webpack": "^3.10.0"
+    "babel-preset-env": "^1.6.1"
   }
 }
