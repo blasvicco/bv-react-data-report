@@ -4,6 +4,8 @@ This is a ReactJS Component that allows to the users generate a preview of data 
 
 The user will be able to chose the item per page, the page format (portrait / landscape) and the page size (a4 / letter / legal).
 
+Columns in table can be easily hide using style. Please refer to [App.css](test/src/App.js) to see an example.
+
 ### Example:
 
 Please refer to the [test](test/src/App.js) file to see it working.
@@ -30,7 +32,7 @@ Then, in the render method we can just call it like:
 <Report data={example}/>
 ```
 
-Where data is an array of objects as you can see in this [example](test/src/example.json)
+Where data is an array of objects as you can see in this [example](test/src/example.json) file.
 
 ### Installation
 
