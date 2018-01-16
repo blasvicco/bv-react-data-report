@@ -3545,11 +3545,11 @@ var _i18nReact = __webpack_require__(64);
 
 var _i18nReact2 = _interopRequireDefault(_i18nReact);
 
-var _reportPage = __webpack_require__(66);
+var _reportPage = __webpack_require__(65);
 
 var _reportPage2 = _interopRequireDefault(_reportPage);
 
-__webpack_require__(69);
+__webpack_require__(68);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3559,7 +3559,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-_i18nReact2.default.setTexts(__webpack_require__(74));
+_i18nReact2.default.setTexts(__webpack_require__(73));
 
 var Report = function (_React$Component) {
   _inherits(Report, _React$Component);
@@ -7951,94 +7951,122 @@ module.exports = __webpack_amd_options__;
 /* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-exports.__esModule = true;
 var React = __webpack_require__(6);
-var mdflavors_1 = __webpack_require__(65);
-function isString(s) {
-    return typeof s === 'string' || s instanceof String;
-}
-function isObject(o) {
-    return typeof o === 'object';
-}
-function isFunction(o) {
-    return typeof o === 'function';
-}
-function get(obj, path) {
-    var spath = path.split('.');
-    for (var i = 0, len = spath.length; i < len; i++) {
-        if (!obj || !isObject(obj))
-            return undefined;
-        obj = obj[spath[i]];
+var _ = {
+    isString: function (s) { return typeof s === 'string' || s instanceof String; },
+    isObject: function (o) { return typeof o === 'object'; },
+    get: function (obj, path) {
+        var spath = path.split('.');
+        for (var i = 0, len = spath.length; i < len; i++) {
+            if (!obj || typeof obj !== 'object')
+                return undefined;
+            obj = obj[spath[i]];
+        }
+        return obj;
     }
-    return obj;
-}
+};
 function first(o) {
     for (var k in o) {
         if (k != '__')
             return o[k];
     }
 }
-function flatten(l) {
-    var r = [];
-    var s = '';
-    var flush = function () { return s && (r.push(s), s = ''); };
-    for (var _i = 0, l_1 = l; _i < l_1.length; _i++) {
-        var i = l_1[_i];
-        if (i == null)
-            continue;
-        if (isString(i)) {
-            s += i;
-        }
-        else {
-            flush();
-            r.push(i);
-        }
+function isEqualShallow(a, b) {
+    if (a === b)
+        return true;
+    if (a == null || b == null)
+        return false;
+    for (var key in a) {
+        if (!(key in b) || a[key] !== b[key])
+            return false;
     }
-    flush();
-    return r.length > 1 ? r : (r.length ? r[0] : null);
+    for (var key in b) {
+        if (!(key in a) || a[key] !== b[key])
+            return false;
+    }
+    return true;
 }
-var matcher = /** @class */ (function () {
-    function matcher(mdFlavor, inter, self) {
-        this.mdFlavor = mdFlavor;
-        this.inter = inter;
-        this.self = self;
-    }
-    matcher.prototype.M = function (value) {
-        if (!value)
-            return null;
-        var m = mdflavors_1.mdMatch(this.mdFlavor, value);
-        if (!m)
-            return value;
-        var middle = null;
-        switch (m.tag) {
-            case "inter":
-                middle = this.inter && this.inter(m.body);
-                break;
-            case "self":
-                middle = this.self && this.self(m.body);
-                break;
-            case "literal":
-                middle = m.body;
-                break;
-            default:
-                middle = React.createElement(m.tag, { key: m.tag + m.body }, this.M(m.body));
-                break;
+function merge2(head, tail) {
+    if (head == null)
+        return tail;
+    if (tail == null)
+        return head;
+    if (_.isString(head) && _.isString(tail))
+        return head + tail;
+    return [head, tail];
+}
+function merge(head, middle, tail) {
+    if (head == null)
+        return merge2(middle, tail);
+    if (middle == null)
+        return merge2(head, tail);
+    if (tail == null)
+        return merge2(head, middle);
+    if (_.isString(head) && _.isString(middle) && _.isString(tail))
+        return head + middle + tail;
+    return [head, middle, tail];
+}
+var maybeRegex = /[\*_\{\[\n]/;
+var regexes = {
+    strong: /^(|.*?\W)\*(\S.*?)\*(|\W.*)$/,
+    em: /^(|.*?\W)_(\S.*?)_(|\W.*)$/,
+    p: /^(.*?)\[(.*?)\](.*)$/,
+    h1: /^(|.*?(?=\n))\n*\s*#([^#].*?)#*\s*\n+([\S\s]*)$/,
+    h2: /^(|.*?(?=\n))\n*\s*##([^#].*?)#*\s*\n+([\S\s]*)$/,
+    h3: /^(|.*?(?=\n))\n*\s*###([^#].*?)#*\s*\n+([\S\s]*)$/,
+    h4: /^(|.*?(?=\n))\n*\s*####([^#].*?)#*\s*\n+([\S\s]*)$/,
+    br: /^(.*?)[^\S\n]*\n()[^\S\n]*([\s\S]*)$/,
+    self: /^(.*?)\{\{(.*?)\}\}(.*)$/,
+    inter: /^(.*?)\{(.*?)\}(.*)$/
+};
+function M(value, vars) {
+    if (value == null || value == '')
+        return null;
+    if (!value.match(maybeRegex))
+        return value;
+    var res = null, type = null;
+    for (var rtype in regexes) {
+        if (!regexes.hasOwnProperty(rtype))
+            continue;
+        var rres = regexes[rtype].exec(value);
+        if (rres) {
+            if (res == null || rres[1].length < res[1].length) {
+                res = rres;
+                type = rtype;
+            }
         }
-        return flatten([this.M(m.head), middle, this.M(m.tail)]);
-    };
-    return matcher;
-}());
+    }
+    switch (type) {
+        case null:
+            return value;
+        case "inter":
+            var _a = res[2].split(','), vn = _a[0], flags = _a[1];
+            var v = _.get(vars, vn);
+            if (v == null) {
+                return merge(M(res[1], vars), null, M(res[3], vars));
+            }
+            else if (React.isValidElement(v)) {
+                return merge(M(res[1], vars), React.cloneElement(v, { key: 'r' }), M(res[3], vars));
+            }
+            var vs;
+            if (flags && flags.match(/l/)) {
+                vs = v.toLocaleString();
+            }
+            else {
+                vs = v.toString();
+            }
+            return merge(M(res[1], vars), vs, M(res[3], vars));
+        case "self":
+            return merge(M(res[1], vars), MDText.translate(res[2], vars), M(res[3], vars));
+        default:
+            return merge(M(res[1], vars), React.createElement(type, { key: type + res[2] }, M(res[2], vars)), M(res[3], vars));
+    }
+}
 function rangeHit(node, val) {
     for (var t in node) {
         if (!node.hasOwnProperty(t))
@@ -8053,7 +8081,7 @@ function resolveContextPath(node, p, path, context) {
     var key = path[p];
     var trans;
     if (key != null && context[key] != null) {
-        trans = get(node, context[key].toString());
+        trans = _.get(node, context[key].toString());
         if (trans == null && (+context[key]) === context[key]) {
             trans = rangeHit(node, +context[key]);
         }
@@ -8062,7 +8090,7 @@ function resolveContextPath(node, p, path, context) {
         trans = node._;
     if (trans == null)
         trans = first(node);
-    if (trans != null && !isString(trans)) {
+    if (trans != null && !_.isString(trans)) {
         return resolveContextPath(trans, p + 1, path, context);
     }
     return trans;
@@ -8071,7 +8099,7 @@ function resolveContext(node, context) {
     if (context == null) {
         return resolveContextPath(node, 0, [], null);
     }
-    else if (!isObject(context)) {
+    else if (!_.isObject(context)) {
         return resolveContextPath(node, 0, ['_'], { _: context });
     }
     else {
@@ -8089,191 +8117,57 @@ function resolveContext(node, context) {
         return resolveContextPath(node, 0, ctx_keys, context);
     }
 }
-var MDText = /** @class */ (function () {
-    function MDText(texts, opt) {
-        this.texts = texts;
-        this.MDFlavor = 0;
-        // public access is deprecated
-        this.notFound = undefined;
-        this.p = this.factory('p');
-        this.span = this.factory('span');
-        this.li = this.factory('li');
-        this.div = this.factory('div');
-        this.button = this.factory('button');
-        this.a = this.factory('a');
-        this.text = this.factory(null);
-        this.setOpts(opt);
+var MDText = (function (_super) {
+    __extends(MDText, _super);
+    function MDText(props) {
+        _super.call(this, props);
     }
-    MDText.prototype.setTexts = function (texts, opt) {
-        this.texts = texts;
-        this.setOpts(opt);
+    MDText.format = function (text, options) {
+        return M(text, options);
     };
-    MDText.prototype.setOpts = function (opt) {
-        if (!opt)
-            return;
-        if (opt.notFound !== undefined)
-            this.notFound = opt.notFound;
-        if (opt.MDFlavor !== undefined)
-            this.MDFlavor = opt.MDFlavor;
-    };
-    MDText.prototype.interpolate = function (exp, vars) {
-        var _a = exp.split(','), vn = _a[0], flags = _a[1];
-        var v = get(vars, vn);
-        if (v == null) {
+    MDText.translate = function (key, options) {
+        if (key == null)
             return null;
-        }
-        else if (React.isValidElement(v)) {
-            return React.cloneElement(v, { key: 'r' });
-        }
-        var vs;
-        if (flags && flags.match(/l/)) {
-            vs = v.toLocaleString();
-        }
-        else {
-            vs = v.toString();
-        }
-        return vs;
-    };
-    MDText.prototype.format = function (value, vars) {
-        var _this = this;
-        if (!value)
-            return value;
-        return new matcher(mdflavors_1.mdFlavors[this.MDFlavor], function (exp) { return _this.interpolate(exp, vars); }, function (exp) { return _this.translate(exp, vars); }).M(value);
-    };
-    MDText.prototype.translate = function (key, options) {
-        if (!key)
-            return key;
-        var trans = get(this.texts, key);
-        var context = options && options.context;
-        if (trans != null && !(isString(trans) || isFunction(trans))) {
-            trans = resolveContext(trans, context);
+        var trans = _.get(MDText.texts, key);
+        if (trans != null && !_.isString(trans)) {
+            trans = resolveContext(trans, options && options.context);
         }
         if (trans == null) {
-            trans = (options && options.notFound !== undefined) ? options.notFound :
-                this.notFound !== undefined ? this.notFound :
-                    key;
+            return key;
         }
-        if (isFunction(trans)) {
-            trans = trans(key, context);
-        }
-        return this.format(trans, options);
+        return M(trans, options);
     };
-    MDText.prototype.factory = function (tagF) {
-        var _this = this;
-        // name High Order Function for React Dev tools
-        var MDText = function (props) {
-            var text = props.text, tag = props.tag, restProps = __rest(props, ["text", "tag"]);
-            var key;
-            var options;
-            if (text == null || isString(text)) {
-                key = text;
-                options = props;
-                var notFound = restProps.notFound, context = restProps.context, rest2Props = __rest(restProps, ["notFound", "context"]);
-                restProps = rest2Props;
-            }
-            else {
-                key = text.key;
-                options = text;
-            }
-            var aTag = tagF || tag;
-            var translation = _this.translate(key, options);
-            return aTag ?
-                React.createElement(aTag, restProps, translation) :
-                translation;
-        };
-        return MDText;
+    MDText.prototype.shouldComponentUpdate = function (nextProps) {
+        return !isEqualShallow(this.props, nextProps);
     };
+    MDText.prototype.render = function () {
+        var tag = this.tag || this.props.tag || 'span';
+        return React.createElement(tag, this.props, MDText.translate(this.props.text, this.props));
+    };
+    MDText.factory = function (tag) {
+        return (function (_super) {
+            __extends(MDTextTag, _super);
+            function MDTextTag(props) {
+                _super.call(this, props);
+                this.tag = tag;
+            }
+            return MDTextTag;
+        })(MDText);
+    };
+    ;
+    MDText.setTexts = function (t) { return MDText.texts = t; };
+    MDText.p = MDText.factory('p');
+    MDText.span = MDText.factory('span');
+    MDText.div = MDText.factory('div');
+    MDText.button = MDText.factory('button');
+    MDText.a = MDText.factory('a');
     return MDText;
-}());
-exports.MDText = MDText;
-var singleton = new MDText(null);
-exports["default"] = singleton;
+})(React.Component);
+module.exports = MDText;
 
 
 /***/ }),
 /* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-exports.__esModule = true;
-var R = {
-    "``": /^(.*?)``(.*?)``(.*)$/,
-    "*": /^(|.*?\W)\*(\S.*?)\*(|\W.*)$/,
-    "**": /^(|.*?\W)\*\*(\S.*?)\*\*(|\W.*)$/,
-    "_": /^(|.*?\W)_(\S.*?)_(|\W.*)$/,
-    "__": /^(|.*?\W)__(\S.*?)__(|\W.*)$/,
-    "~": /^(|.*?\W)~(\S.*?)~(|\W.*)$/,
-    "~~": /^(|.*?\W)~~(\S.*?)~~(|\W.*)$/,
-    "[]": /^(.*?)\[(.*?)\](.*)$/,
-    "#": /^(|.*?(?=\n))\n*\s*#([^#].*?)#*\s*\n+([\S\s]*)$/,
-    "##": /^(|.*?(?=\n))\n*\s*##([^#].*?)#*\s*\n+([\S\s]*)$/,
-    "###": /^(|.*?(?=\n))\n*\s*###([^#].*?)#*\s*\n+([\S\s]*)$/,
-    "####": /^(|.*?(?=\n))\n*\s*####([^#].*?)#*\s*\n+([\S\s]*)$/,
-    "\n": /^(.*?)[^\S\n]*\n()[^\S\n]*([\s\S]*)$/,
-    "{{}}": /^(.*?)\{\{(.*?)\}\}(.*)$/,
-    "{}": /^(.*?)\{(.*?)\}(.*)$/
-};
-exports.mdFlavors = [
-    {
-        maybe: /[\*_\{\[\n]/,
-        tags: {
-            strong: R["*"],
-            em: R["_"],
-            p: R["[]"],
-            h1: R["#"],
-            h2: R["##"],
-            h3: R["###"],
-            h4: R["####"],
-            br: R["\n"],
-            self: R["{{}}"],
-            inter: R["{}"]
-        }
-    },
-    {
-        maybe: /[`\*_~\{\[\n]/,
-        tags: {
-            literal: R["``"],
-            strong: R["**"],
-            em: R["*"],
-            b: R["__"],
-            i: R["_"],
-            strike: R["~~"],
-            u: R["~"],
-            p: R["[]"],
-            h1: R["#"],
-            h2: R["##"],
-            h3: R["###"],
-            h4: R["####"],
-            br: R["\n"],
-            self: R["{{}}"],
-            inter: R["{}"]
-        }
-    }
-];
-function mdMatch(md, value) {
-    if (!value.match(md.maybe))
-        return null;
-    var tags = md.tags;
-    var match = null, tag = null;
-    for (var ctag in tags) {
-        if (!tags.hasOwnProperty(ctag))
-            continue;
-        var cmatch = tags[ctag].exec(value);
-        if (cmatch) {
-            if (match == null || cmatch[1].length < match[1].length) {
-                match = cmatch;
-                tag = ctag;
-            }
-        }
-    }
-    return match && { tag: tag, head: match[1], body: match[2], tail: match[3] };
-}
-exports.mdMatch = mdMatch;
-
-
-/***/ }),
-/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8285,11 +8179,11 @@ var _react = __webpack_require__(6);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reportHeader = __webpack_require__(67);
+var _reportHeader = __webpack_require__(66);
 
 var _reportHeader2 = _interopRequireDefault(_reportHeader);
 
-var _reportRow = __webpack_require__(68);
+var _reportRow = __webpack_require__(67);
 
 var _reportRow2 = _interopRequireDefault(_reportRow);
 
@@ -8378,7 +8272,7 @@ module.exports = function (_React$Component) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 67 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8456,7 +8350,7 @@ module.exports = function (_React$Component) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 68 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8556,13 +8450,13 @@ module.exports = function (_React$Component) {
 }(_react2.default.Component);
 
 /***/ }),
-/* 69 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(70);
+var content = __webpack_require__(69);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -8570,7 +8464,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(72)(content, options);
+var update = __webpack_require__(71)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -8587,10 +8481,10 @@ if(false) {
 }
 
 /***/ }),
-/* 70 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(71)(false);
+exports = module.exports = __webpack_require__(70)(false);
 // imports
 
 
@@ -8601,7 +8495,7 @@ exports.push([module.i, ".report__control-panel {\n  display: flex;\n  justify-c
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, exports) {
 
 /*
@@ -8683,7 +8577,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -8739,7 +8633,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(73);
+var	fixUrls = __webpack_require__(72);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -9055,7 +8949,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 
@@ -9150,7 +9044,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports) {
 
 module.exports = {"report":{"controlPanel":{"itemsPerPage":"Items per page","pageFormat":"Page format","pageSize":"Page size","processing":"Processing...","generatePdf":"Download PDF"}}}

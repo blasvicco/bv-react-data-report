@@ -1,6 +1,6 @@
 {
   "name": "react-data-report",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
@@ -17,11 +17,11 @@
   },
   "main": "build/report.js",
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^15.6.2"
   },
   "dependencies": {
-    "i18n-react": "^0.6.3",
-    "react": "^16.0.0"
+    "i18n-react": "^0.1.0",
+    "react": "^15.6.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
