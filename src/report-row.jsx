@@ -1,5 +1,5 @@
 import React from 'react';
-
+import moment from 'moment';
 const dateFormat = 'MM/DD/YYYY';
 
 module.exports = class ReportRow extends React.Component {
