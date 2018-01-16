@@ -1,6 +1,6 @@
 {
   "name": "react-data-report",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
