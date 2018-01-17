@@ -11,7 +11,7 @@ module.exports = class ReportHeader extends React.Component {
 
   _setInitialState(data) {
     if (data.length > 0) {
-      this.setState({header: this._parseData(data),});
+      this.setState({header: this._parseData(data)});
     }
   }
 
