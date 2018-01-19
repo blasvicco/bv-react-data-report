@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 
-import Report from 'react-data-report';
+import Report from 'bv-react-data-report';
 import example from './example.json';
 
 import './App.css';
