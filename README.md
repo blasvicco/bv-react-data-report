@@ -1,4 +1,4 @@
-# react-data-report
+# bv-react-data-report
 
 This is a ReactJS Component that generate a preview of data to be exported as PDF file.
 
@@ -23,7 +23,7 @@ npm start
 
 As you will be able to see in [test](test/src/App.js) in order to use the component we need to importe it as:
 ```JAVASCRIPT
-import Report from 'react-data-report';
+import Report from 'bv-react-data-report';
 ```
 
 Then, in the render method we can just call it like:
@@ -38,5 +38,5 @@ Where data is an array of objects as you can see in this [example](test/src/exam
 
 Install this component is easy, just use npm as:
 ```BASH
-npm install react-data-report
+npm install bv-react-data-report
 ```

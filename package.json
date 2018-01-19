@@ -1,6 +1,6 @@
 {
-  "name": "react-data-report",
-  "version": "1.0.7",
+  "name": "bv-react-data-report",
+  "version": "1.0.8",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
@@ -9,7 +9,7 @@
     "Reports",
     "Preview"
   ],
-  "author": "\"Blas Vicco\"",
+  "author": "Blas Vicco",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
