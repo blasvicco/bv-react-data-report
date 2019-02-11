@@ -43,5 +43,5 @@ npm install bv-react-data-report
 
 Or yarn
 ```BASH
-yarn add install bv-react-data-report
+yarn add bv-react-data-report
 ```
