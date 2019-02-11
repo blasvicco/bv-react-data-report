@@ -1,6 +1,6 @@
 {
   "name": "bv-react-data-report",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
@@ -17,31 +17,31 @@
   },
   "main": "build/report.js",
   "peerDependencies": {
-    "react": "^15.6.2"
+    "react": "^16.8.1"
   },
   "dependencies": {
-    "ansi-regex": "^3.0.0",
+    "ansi-regex": "^4.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
+    "babel-loader": "^8.0.5",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.6.1",
-    "css-loader": "^0.28.8",
+    "css-loader": "^2.1.0",
     "html2canvas": "^1.0.0-alpha.9",
-    "i18n-react": "^0.1.0",
+    "i18n-react": "^0.6.4",
     "jspdf": "^1.3.5",
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",
-    "react": "^15.6.2",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.1",
-    "webpack": "^3.10.0"
+    "react": "^16.8.1",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
     "build": "webpack"
   },
-  "devDependencies": { }
+  "devDependencies": {}
 }

@@ -4,15 +4,21 @@
   "private": true,
   "dependencies": {
     "bv-react-data-report": "^1.0.8",
-    "react": "^15.6.2",
-    "react-dom": "^15.6.2",
-    "react-scripts": "1.1.0",
-    "update": "^0.7.4"
+    "react": "*",
+    "react-dom": "*",
+    "react-scripts": "*",
+    "update": "*"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

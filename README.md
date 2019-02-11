@@ -15,8 +15,8 @@ To run the test:
 2. Execute in console:
 ```BASH
 cd test
-npm install
-npm start
+yarn
+yarn start
 ```
 
 ### General Usage
@@ -39,4 +39,9 @@ Where data is an array of objects as you can see in this [example](test/src/exam
 Install this component is easy, just use npm as:
 ```BASH
 npm install bv-react-data-report
+```
+
+Or yarn
+```BASH
+yarn add install bv-react-data-report
 ```
