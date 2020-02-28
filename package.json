@@ -1,6 +1,6 @@
 {
   "name": "bv-react-data-report",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "ReactJS component to preview data and export it as PDF file.",
   "keywords": [
     "ReactJS",
@@ -16,32 +16,55 @@
     "url": "https://github.com/blasvicco/react-data-report.git"
   },
   "main": "build/report.js",
-  "peerDependencies": {
-    "react": "^16.8.1"
-  },
   "dependencies": {
-    "ansi-regex": "^4.0.0",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.6.1",
-    "css-loader": "^2.1.0",
-    "html2canvas": "^1.0.0-alpha.9",
-    "i18n-react": "^0.6.4",
-    "jspdf": "^1.3.5",
-    "moment": "^2.20.1",
-    "node-sass": "^4.7.2",
-    "react": "^16.8.1",
+    "bv-react-svgloader": "^1.1.1",
+    "cookie": "^0.4.0",
+    "core-js": "3",
+    "es6-promise": "^4.2.8",
+    "html2canvas": "^1.0.0-rc.5",
+    "i18n-react": "^0.7.0",
+    "isomorphic-fetch": "^2.2.1",
+    "json-loader": "^0.5.7",
+    "jspdf": "^1.5.3",
+    "moment": "^2.24.0",
+    "react": "^16.8.6",
+    "react-circos": "^1.0.0",
+    "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-es6-promise": "^1.1.1",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-flowtype": "^3.9.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.7.0",
+    "node-sass": "^4.12.0",
     "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.29.3"
+    "webpack": "^4.33.0",
+    "webpack-bundle-tracker": "^0.4.2-beta",
+    "webpack-cli": "^3.3.3",
+    "webpack-dev-server": "^3.7.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --watch",
-    "build": "webpack"
-  },
-  "devDependencies": {}
+    "analyze": "source-map-explorer build/react-app/js/*",
+    "build": "webpack --mode production",
+    "buildForAnalize": "webpack --env.dev --mode production",
+    "dev": "webpack --env.dev --mode development",
+    "lint": "eslint ./src --ext .jsx,.js",
+    "start": "node_modules/.bin/webpack-dev-server --host 0.0.0.0 --env.dev --mode development"
+  }
 }

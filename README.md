@@ -4,44 +4,46 @@ This is a ReactJS Component that generate a preview of data to be exported as PD
 
 The user will be able to choose the items per page, the page format (portrait / landscape) and the page size (a4 / letter / legal).
 
-Columns in table can be easily hide using style. Please refer to [App.css](test/src/App.js) to see an example.
+The package expose the libs to be overwritten if you want to customize any behavior.
+
+### Dependencies:
+
+- [html2canvas](https://html2canvas.hertzen.com/)
+- [i18n-react](https://www.npmjs.com/package/i18n-react)
+- [jspdf](https://www.npmjs.com/package/jspdf)
 
 ### Example:
-
-Please refer to the [test](test/src/App.js) file to see how works.
 
 To run the test:
 1. Clone the repository
 2. Execute in console:
 ```BASH
-cd test
 yarn
 yarn start
 ```
 
 ### General Usage
 
-As you will be able to see in [test](test/src/App.js) in order to use the component we need to importe it as:
 ```JAVASCRIPT
-import Report from 'bv-react-data-report';
+import { Report } from 'bv-react-data-report/src/libs';
 ```
 
 Then, in the render method we can just call it like:
 
 ```JAVASCRIPT
-<Report data={example}/>
+<Report data={[{ id: 1, value: 'Some value' }, { id: 2, value: 'Some other value' }]}/>
 ```
 
-Where data is an array of objects as you can see in this [example](test/src/example.json) file.
+Where data is an array of objects as you can see in this [example](src/assets/example.json) file.
 
 ### Installation
 
 Install this component is easy, just use npm as:
 ```BASH
-npm install bv-react-data-report
+npm install bv-react-data-report html2canvas i18n-react jspdf
 ```
 
 Or yarn
 ```BASH
-yarn add bv-react-data-report
+yarn add bv-react-data-report html2canvas i18n-react jspdf
 ```
