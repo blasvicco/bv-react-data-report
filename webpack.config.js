@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const { optimize, DefinePlugin, HashedModuleIdsPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 
 const DEV_CONFIGURATION = {
   devtool: 'source-map',
@@ -104,55 +103,29 @@ const PRO_CONFIGURATION = {
       root: 'ReactDOM',
     }
   },
-  // optimization: {
-  //   // flagIncludedChunks: true,
-  //   // mergeDuplicateChunks: true,
-  //   // minimize: false,
-  //   // namedChunks: false,
-  //   // namedModules: false,
-  //   // noEmitOnErrors: true,
-  //   // nodeEnv: 'production',
-  //   // occurrenceOrder: true,
-  //   // concatenateModules: true,
-  //   // removeEmptyChunks: true,
-  //   // sideEffects: true,
-  //   // splitChunks: { chunks: 'all' },
-  //   // usedExports: true,
-  // },
   module: {
     rules: [{
-      test: /\.scss$/,
-      use: [{
-        loader: "css-loader"
-      }, {
-        loader: "sass-loader"
-      }]
+      test: /.(css|scss)$/,
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        'sass-loader',
+      ],
     }, {
-      test: /\.jsx?$/,
+      test: /.(js|jsx)$/,
+      exclude: ['/node_modules/', '/build/', '/dist/'],
       include: path.resolve(__dirname, 'src/'),
-      exclude: /node_modules/,
       loader: 'babel-loader',
-      query: { presets: ['@babel/env'] },
     }],
   },
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist/'),
-    // publicPath: '',
-    // libraryExport: 'default',
     libraryTarget: 'commonjs2',
   },
-  // plugins: [
-  //   new MiniCssExtractPlugin({ filename: 'index.css' }),
-  //   // new optimize.ModuleConcatenationPlugin(),
-  //   // new HashedModuleIdsPlugin({
-  //   //   hashFunction: 'sha256',
-  //   //   hashDigest: 'hex',
-  //   //   hashDigestLength: 4
-  //   // }),
-  //   // new optimize.OccurrenceOrderPlugin(),
-  //   // new NoEmitOnErrorsPlugin(),
-  // ],
+  plugins: [
+    new MiniCssExtractPlugin({ filename: 'index.css' }),
+  ],
   resolve: {
     modules: [ path.resolve(__dirname, 'src'), 'node_modules' ],
     extensions: ['.js', '.jsx'],
