@@ -6,6 +6,7 @@ import Row from './row';
 export {
   Header,
   Page,
-  Report,
   Row,
 };
+
+export default Report;

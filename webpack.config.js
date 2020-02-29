@@ -1,157 +1,166 @@
 const path = require('path');
-const BundleTracker = require('webpack-bundle-tracker');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { optimize, DefinePlugin, HashedModuleIdsPlugin, NoEmitOnErrorsPlugin } = require('webpack');
+// const { optimize, DefinePlugin, HashedModuleIdsPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 
-const getDevPlugins = (env) => {
-  return env && env.dev
-    ? [
-      new HtmlWebpackPlugin({
-        hash: true,
-        template: path.join(__dirname, 'dev', 'index.tpl'),
-        path: path.join(__dirname, 'dev'),
-      }),
-      new DefinePlugin({
-        'process.env': {
-          WEBAPP_API_URL: env && env.dev && '"http://localhost:3000"',
-        }
-      }),
-    ]
-    : [ ];
+const DEV_CONFIGURATION = {
+  devtool: 'source-map',
+  devServer: {
+    contentBase: ['/dev'],
+    port: 3000,
+    historyApiFallback: true,
+  },
+  entry: path.join(__dirname, 'src', 'index.jsx'),
+  module: {
+    rules: [{
+      test: /.(js|jsx)$/,
+      enforce: 'pre',
+      loader: 'eslint-loader',
+      exclude: /node_modules/,
+      options: {
+        emitWarning: true,
+        configFile: './.eslintrc.json',
+      },
+    }, {
+      test: /.(js|jsx)$/,
+      exclude: ['/node_modules/', '/build/', '/dist/'],
+      use: { loader: 'babel-loader' },
+      include: path.join(__dirname, '/src'),
+    }, {
+      test: /.(css|scss)$/,
+      use: [
+        MiniCssExtractPlugin.loader,
+        'css-loader',
+        'sass-loader',
+      ],
+    }, {
+      test: /.(jpg|jpeg|png|gif|mp3|svg)$/,
+      use: [{
+        loader: "file-loader",
+        options: {
+          name: 'react-app/media/[name]-[hash:8].[ext]',
+          publicPath: '',
+        },
+      }],
+    }],
+  },
+  resolve: {
+    modules: [ path.resolve(__dirname, 'src'), 'node_modules' ],
+    extensions: ['.js', '.jsx'],
+  },
+  optimization: {
+    minimize: false,
+    splitChunks: { chunks: 'all' },
+  },
+  output: {
+    path: path.join(__dirname, 'build'),
+    filename: 'react-app/js/[name].js',
+    sourceMapFilename: 'react-app/js/[name].js.map',
+    publicPath: 'http://localhost:3000/',
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      hash: true,
+      template: path.join(__dirname, 'dev', 'index.tpl'),
+      path: path.join(__dirname, 'dev'),
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'react-app/css/[name].css',
+    }),
+  ],
 };
 
-const getProdPlugins = (env) => {
-  return env && env.dev
-    ? [ ]
-    : [
-      new optimize.ModuleConcatenationPlugin(),
-      new HashedModuleIdsPlugin({
-        hashFunction: 'sha256',
-        hashDigest: 'hex',
-        hashDigestLength: 4
-      }),
-      new optimize.OccurrenceOrderPlugin(),
-      new NoEmitOnErrorsPlugin(),
-    ];
-}
-
-const getOptimization = (env) => {
-  const general = {
-    splitChunks: {
-      chunks: 'all',
+const PRO_CONFIGURATION = {
+  entry: path.join(__dirname, 'src/libs', 'index.jsx'),
+  externals: {
+    jspdf: {
+      commonjs: 'jspdf',
+      commonjs2: 'jspdf',
+      amd: 'jspdf',
+      root: 'jspdf',
     },
-  };
-  return env && env.dev
-    ? {
-      optimization: {
-        ...general,
-        minimize: false,
-      },
+    html2canvas: {
+      commonjs: 'html2canvas',
+      commonjs2: 'html2canvas',
+      amd: 'html2canvas',
+      root: 'html2canvas',
+    },
+    'i18n-react': {
+      commonjs: 'i18n-react',
+      commonjs2: 'i18n-react',
+      amd: 'i18n-react',
+      root: 'i18n-react',
+    },
+    react: {
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'React',
+      root: 'React',
+    },
+    'react-dom': {
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      amd: 'ReactDOM',
+      root: 'ReactDOM',
     }
-    : {
-
-      optimization: {
-        ...general,
-        namedModules: false,
-        namedChunks: false,
-        nodeEnv: 'production',
-        flagIncludedChunks: true,
-        occurrenceOrder: true,
-        sideEffects: true,
-        usedExports: true,
-        concatenateModules: true,
-        noEmitOnErrors: true,
-        minimize: true,
-        removeAvailableModules: true,
-        removeEmptyChunks: true,
-        mergeDuplicateChunks: true,
-      },
-    };
-}
+  },
+  // optimization: {
+  //   // flagIncludedChunks: true,
+  //   // mergeDuplicateChunks: true,
+  //   // minimize: false,
+  //   // namedChunks: false,
+  //   // namedModules: false,
+  //   // noEmitOnErrors: true,
+  //   // nodeEnv: 'production',
+  //   // occurrenceOrder: true,
+  //   // concatenateModules: true,
+  //   // removeEmptyChunks: true,
+  //   // sideEffects: true,
+  //   // splitChunks: { chunks: 'all' },
+  //   // usedExports: true,
+  // },
+  module: {
+    rules: [{
+      test: /\.scss$/,
+      use: [{
+        loader: "css-loader"
+      }, {
+        loader: "sass-loader"
+      }]
+    }, {
+      test: /\.jsx?$/,
+      include: path.resolve(__dirname, 'src/'),
+      exclude: /node_modules/,
+      loader: 'babel-loader',
+      query: { presets: ['@babel/env'] },
+    }],
+  },
+  output: {
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'dist/'),
+    // publicPath: '',
+    // libraryExport: 'default',
+    libraryTarget: 'commonjs2',
+  },
+  // plugins: [
+  //   new MiniCssExtractPlugin({ filename: 'index.css' }),
+  //   // new optimize.ModuleConcatenationPlugin(),
+  //   // new HashedModuleIdsPlugin({
+  //   //   hashFunction: 'sha256',
+  //   //   hashDigest: 'hex',
+  //   //   hashDigestLength: 4
+  //   // }),
+  //   // new optimize.OccurrenceOrderPlugin(),
+  //   // new NoEmitOnErrorsPlugin(),
+  // ],
+  resolve: {
+    modules: [ path.resolve(__dirname, 'src'), 'node_modules' ],
+    extensions: ['.js', '.jsx'],
+  },
+};
 
 module.exports = (env) => {
-  return {
-    devtool: env && env.dev && 'source-map',
-    devServer: {
-      contentBase: ['/dev'],
-      port: 3000,
-      historyApiFallback: true,
-    },
-    entry: path.join(__dirname, 'src', 'index.jsx'),
-    module: {
-      rules: [
-        {
-          test: /.(js|jsx)$/,
-          enforce: 'pre',
-          loader: 'eslint-loader',
-          exclude: /node_modules/,
-          options: {
-            emitWarning: true,
-            configFile: './.eslintrc.json'
-          }
-        },
-        {
-          test: /.(js|jsx)$/,
-          exclude: ['/node_modules/', '/build/'],
-          use: { loader: 'babel-loader' },
-          include: path.join(__dirname, '/src'),
-        },
-        {
-          test: /.(css|scss)$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            'css-loader',
-            {
-              loader: 'sass-loader',
-              options: {
-                data: `$env: ${env && env.dev ? '"development"' : '"production"'};`,
-              }
-            }
-          ]
-        },
-        {
-          test: /.(jpg|jpeg|png|gif|mp3|svg)$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                name: 'react-app/media/[name]-[hash:8].[ext]',
-                publicPath: env && env.dev
-                  ? ''
-                  : '/static/',
-              }
-            }
-          ]
-        }
-      ]
-    },
-    ...getOptimization(env),
-    output: {
-      path: path.join(__dirname, 'build'),
-      filename: 'react-app/js/[name].js',
-      sourceMapFilename: 'react-app/js/[name].js.map',
-      publicPath: env && env.dev ? 'http://localhost:3000/' : undefined,
-    },
-    plugins: [
-      ...getDevPlugins(env),
-      new MiniCssExtractPlugin({
-        filename: 'react-app/css/[name].css',
-      }),
-      ...getProdPlugins(env),
-      new BundleTracker({ path: __dirname, filename: 'webpack-stats.json' }),
-      new DefinePlugin({ RELEASE_VERSION: JSON.stringify(process.env.npm_package_version) }),
-    ],
-    resolve: {
-      modules: [ path.resolve(__dirname, 'src'), 'node_modules' ],
-      alias: {
-        components: path.resolve(__dirname, 'src/components/'),
-        containers: path.resolve(__dirname, 'src/containers/'),
-        controllers: path.resolve(__dirname, 'src/controllers/'),
-        models: path.resolve(__dirname, 'src/models/'),
-        modules: path.resolve(__dirname, 'src/modules/'),
-      },
-      extensions: ['.js', '.jsx']
-    },
-  };
+  return env && env.dev
+    ? DEV_CONFIGURATION
+    : PRO_CONFIGURATION;
 };

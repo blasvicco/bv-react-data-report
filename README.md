@@ -25,7 +25,7 @@ yarn start
 ### General Usage
 
 ```JAVASCRIPT
-import { Report } from 'bv-react-data-report/src/libs';
+import { Report } from 'bv-react-data-report';
 ```
 
 Then, in the render method we can just call it like:
